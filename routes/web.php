@@ -13,11 +13,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
-
-Route::get('/tracking', function () {
-    return view('tracking.show');
-});
+// use default blade with server side rendering when possible
+Route::resource('/tracking', 'App\Http\Controllers\TrackingController')->only(['index', 'show']);
