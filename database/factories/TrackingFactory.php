@@ -18,7 +18,7 @@ class TrackingFactory extends Factory
     {
         return [
             'tracking_code' => $this->faker->unique()->numberBetween($min = 1000, $max = 9000),
-            'estimated_delivery' => $this->faker->dateTimeInInterval($startDate = '-1 year', $interval = '+ 15 days', $timezone = 'CET')
+            'estimated_delivery' => $this->faker->dateTimeInInterval($startDate = '-1 month', $interval = '+ 2 month', $timezone = 'CET')
         ];
     }
 }

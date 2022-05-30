@@ -21,7 +21,7 @@
 
             this.preventAjax = true;
 
-            // using the query format allows to support javascript disabled browsers
+            // using this query format allows to support javascript disabled browsers
             // so that submitting the form always works            
             const url = `${e.target.action}/?tracking_code=${this.tracking_code}`;
             const response = await fetch(url, {
@@ -46,6 +46,7 @@
           },
           formatDate(datetime){
             let dateObject = new Date(Date.parse( datetime ))
+            console.log(dateObject > new Date());
             return dateObject.toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric"}) ;
           }
         }).mount()
@@ -68,7 +69,12 @@
         </div>
         <div class="mb-6">
           <p v-if="tracking.error" v-text="tracking.error"></p>
-          <p v-if="tracking.estimated_delivery">The shipping will arrive on @{{ formatDate(tracking.estimated_delivery)}}</p>
+
+          <p v-if="tracking.estimated_delivery">
+            <template v-if="new Date(Date.parse( tracking.estimated_delivery )) < new Date()">The shipping has arrived on</template> 
+            <template v-else>The shipping will arrive on</template> 
+            @{{ formatDate(tracking.estimated_delivery)}}
+          </p>
         </div>
       </form>
 
