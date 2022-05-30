@@ -46,7 +46,6 @@
           },
           formatDate(datetime){
             let dateObject = new Date(Date.parse( datetime ))
-            console.log(dateObject > new Date());
             return dateObject.toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric"}) ;
           }
         }).mount()

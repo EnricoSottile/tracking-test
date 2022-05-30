@@ -19,9 +19,7 @@ use Illuminate\Support\Facades\Route;
 // eventual middlewares and other stuff can be added here
 Route::prefix('tracking')->group(function () {
 
-    Route::get('/', function () {
-        return view('tracking.index');
-    })->name('tracking.index');
+    Route::get('/', 'App\Http\Controllers\TrackingController@index')->name('tracking.index');
 
     Route::get('/search', 'App\Http\Controllers\TrackingController@show')
         ->name('tracking.show');

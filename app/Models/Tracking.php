@@ -9,6 +9,10 @@ class Tracking extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'tracking_code', 'estimated_delivery'
+    ];
+
     /**
      * The attributes that should be cast.
      *
