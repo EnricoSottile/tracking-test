@@ -9,15 +9,15 @@ final class TrackingService {
 
 
     protected function getFromCsv(string $tracking_code) : Tracking {
-        $data = array_map('str_getcsv', file('data-example.csv'));
+        $data = array_map('str_getcsv', file(public_path('data-example.csv')));
         $data = array_filter($data, fn ($row) => $row[1] === $tracking_code);
         if (!count($data)) {
             abort(404);
         }
 
         return new Tracking([
-            'tracking_code' => $data[0][1],
-            'estimated_delivery' => $data[0][2],
+            'tracking_code' => current($data)[1],
+            'estimated_delivery' => current($data)[2],
         ]);
     }
 
@@ -28,7 +28,7 @@ final class TrackingService {
      * @return Tracking
      */
     public function find(string $tracking_code) : Tracking {
-        $tracking = env('USE_CSV') === true ? 
+        $tracking = config('app.use_csv') === true ? 
             $this->getFromCsv($tracking_code) 
             : Tracking::where('tracking_code', $tracking_code)->firstOrFail();
 
