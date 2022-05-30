@@ -14,4 +14,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 // use default blade with server side rendering when possible
-Route::resource('/tracking', 'App\Http\Controllers\TrackingController')->only(['index', 'show']);
+// SSR with vue or react can be an excellent alternative
+Route::get('/tracking', function () {
+    return view('tracking.index');
+})->name('tracking.index');
+
+
+Route::get('/tracking/{tracking?}', function () {
+    return view('tracking.show');
+})->name('tracking.show');

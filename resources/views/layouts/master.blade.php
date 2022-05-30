@@ -10,6 +10,14 @@
     <!-- development only -->
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <style>
+        button[disabled] {
+            background-color: grey !important;
+            cursor:not-allowed;
+            pointer-events: none;
+        }
+    </style>
+
 </head>
 
 <body>
