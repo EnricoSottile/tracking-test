@@ -15,11 +15,14 @@ use Illuminate\Support\Facades\Route;
 
 // use default blade with server side rendering when possible
 // SSR with vue or react can be an excellent alternative
-Route::get('/tracking', function () {
-    return view('tracking.index');
-})->name('tracking.index');
 
+// eventual middlewares and other stuff can be added here
+Route::prefix('tracking')->group(function () {
 
-Route::get('/tracking/{tracking?}', function () {
-    return view('tracking.show');
-})->name('tracking.show');
+    Route::get('/', function () {
+        return view('tracking.index');
+    })->name('tracking.index');
+
+    Route::get('/search', 'App\Http\Controllers\TrackingController@show')
+        ->name('tracking.show');
+});
