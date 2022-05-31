@@ -27,6 +27,10 @@ class TrackingController extends Controller
 
         sleep(1); // simulate network
 
+        // using a service we can separate the business logic from the other layers of the application
+        // this also allows for reusing the code from other points (should the need of it arises)
+        // it is also the first step for easier testing, or for more advanced decoupling of the structure
+        // such as the use of interfaces or composer packages
         $tracking = (new TrackingService())->find($request->tracking_code);
         
         if ($request->ajax()){

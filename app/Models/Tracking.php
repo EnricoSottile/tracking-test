@@ -9,6 +9,7 @@ class Tracking extends Model
 {
     use HasFactory;
 
+    // mass assignment fillables field
     protected $fillable = [
         'tracking_code', 'estimated_delivery'
     ];

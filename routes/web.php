@@ -24,3 +24,7 @@ Route::prefix('tracking')->group(function () {
     Route::get('/search', 'App\Http\Controllers\TrackingController@show')
         ->name('tracking.show');
 });
+
+
+// or use resource routes for full RESTful controllers
+// Route::resource('...')

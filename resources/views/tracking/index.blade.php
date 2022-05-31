@@ -2,8 +2,11 @@
 
 @section('main_content')
 
-      <!-- development only - this is a tiny and optimized vue version designed to be used from a CDN  -->
-      <!-- In a real case I go for the full build step with webpack, babel, npm... -->
+      <!-- development only - this is a tiny and optimized vue version designed to be used from a CDN.
+           In a real case I often go for the full build step with webpack, babel, npm...
+           My favourite app structure usually involves single file components that can be reused and easily tested.
+           But there are websites that just need some "enhancement" and not a full frontend framework.      
+          -->
       <script type="module">
         import { createApp } from 'https://unpkg.com/petite-vue?module'
 
@@ -21,29 +24,44 @@
 
             this.preventAjax = true;
 
-            // using this query format allows to support javascript disabled browsers
-            // so that submitting the form always works            
+            // using the query parameter "?=1234" instead of a segment such as "/tracking/1234" 
+            // allows to support javascript disabled browsers so that submitting the form always works
             const url = `${e.target.action}/?tracking_code=${this.tracking_code}`;
+
+            // we are not modifiying anything on the server, so GET is the correct HTTP verb
             const response = await fetch(url, {
               headers: {
                 'Content-Type': 'application/json',
 
+                // in older Laravel version I used to manually add the XSRF token
+                // but I see it's already in the request, I can only guess that's a Sail feature
+                // or an automation by Vue. Please forgive my ignorance on this fact: 
+                // I've not used Laravel for a few years and I need to catch up on a few things
+
                 // trick to have laravel recognize the request as ajax
-                // $request->ajax() 
+                // when doing $request->ajax() 
                 'X-Requested-With' : 'XMLHttpRequest'
               },
             });
 
-            if (!response.ok) {
-              const msg = `HTTP error! status: ${response.status}`;
-              this.tracking.error = msg;
-              throw new Error(msg);
-            }
+            // a very basic error handling
+            // in a real world case I usually extract all the common error handling boilerplate
+            // to an external file, so that the actual request remain tidy and clean
+            if (!response.ok) this.handleError(response);
             const data = await response.json();
             
             this.tracking = data;
-            this.preventAjax = false;
+            this.preventAjax = false; // restore the button
           },
+
+          handleError(response){
+            let msg = `HTTP error! status: ${response.status}.`;
+            
+            if (response.status === 404) msg += ' The tracking code does not exist!' 
+            this.tracking.error = msg;
+            this.preventAjax = false; // restore the button
+            throw new Error(msg);
+          }
           formatDate(datetime){
             let dateObject = new Date(Date.parse( datetime ))
             return dateObject.toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric"}) ;
@@ -53,7 +71,8 @@
       </script>
 
 
-      <!-- using a form allows for a better user experience overall even when sending data via ajax requests -->
+      <!-- using a form allows for a better user experience overall even when sending data via ajax requests
+           eg: automatic handling of keyboard events, required inputs and so on -->
       <form action="{{ route('tracking.show')}}" @submit.prevent="onSubmit" method="get" v-scope class="block p-6 max-w-2xl bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700 mx-auto">
         <div class="mb-6">
             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="name">Enter tracking code:
