@@ -57,11 +57,11 @@
           handleError(response){
             let msg = `HTTP error! status: ${response.status}.`;
             
-            if (response.status === 404) msg += ' The tracking code does not exist!' 
+            if (response.status === 404) msg += ' The tracking code does not exist!'; 
             this.tracking.error = msg;
             this.preventAjax = false; // restore the button
             throw new Error(msg);
-          }
+          },
           formatDate(datetime){
             let dateObject = new Date(Date.parse( datetime ))
             return dateObject.toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric"}) ;
